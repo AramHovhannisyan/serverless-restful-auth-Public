@@ -1,0 +1,63 @@
+service: my-express-serverless
+org: arams
+app: restful-auth
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: dev
+  region: us-east-1
+  environment:
+    NODE_ENV: dev
+
+functions:
+  healthCheck:
+    handler: dist/lambdas.handler
+    events:
+      - http: 
+          path: /health
+          method: get
+  
+  getAllUsers:
+    handler: dist/lambdas.handler
+    events:
+      - http: 
+          path: /api/v1/user
+          method: get
+
+  registerUser:
+    handler: dist/lambdas.handler
+    events:
+      - http: 
+          path: /api/v1/user
+          method: post
+
+  loginUser:
+    handler: dist/lambdas.handler
+    events:
+      - http: 
+          path: /api/v1/auth/login
+          method: post
+
+  logoutUser:
+    handler: dist/lambdas.handler
+    events:
+      - http: 
+          path: /api/v1/auth/logout
+          method: get
+
+  refreshToken:
+    handler: dist/lambdas.handler
+    events:
+      - http: 
+          path: /api/v1/auth/refresh
+          method: get
+
+
+plugins:
+  # - serverless-plugin-typescript
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3600
